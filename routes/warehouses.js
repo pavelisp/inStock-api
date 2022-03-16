@@ -21,7 +21,7 @@ function writeWarehouses(data){
 
 router.get('/', (req, res)=> {
   readWarehouses();
-  res.status(200).send(warehouses);
+  res.status(200).send(readWarehouses());
 })
 
 router.post('/addWarehouse', (req,res) => {
