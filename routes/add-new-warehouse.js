@@ -28,6 +28,34 @@ router.post('/addWarehouse', (req,res) => {
         if (!name){
             return res.status(400).json({
                 message: "Warehouse name is REQUIRED!"
+            })
+        if (!address){
+                return res.status(400).json({
+                    message: "Warehouse address is REQUIRED!"
+                }) 
+        if (!city){
+                return res.status(400).json({
+                     message: "Warehouse city is REQUIRED!"
+                    }) 
+        if (!country){
+                return res.status(400).json({
+                message: "Warehouse country is REQUIRED!"
+                        }) 
+        if (!contact){
+            return res.status(400).json({
+                message: "Contact Name is REQUIRED!"
+            }) 
+        if (!position){
+            return res.status(400).json({
+                message: "Contact Position is REQUIRED!"
+            })
+        if (!phone){
+            return res.status(400).json({
+                message: "Phone Number is REQUIRED!"
+            })
+        if (!email){
+            return res.status(400).json({
+                message: "Email is REQUIRED!"
             });
             const newWarehouse = {name,
                 address,
