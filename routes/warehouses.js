@@ -90,4 +90,4 @@ router.post('/addWarehouse', (req,res) => {
             res.status(201).json(newWarehouse)
         })
         
-module.exports=router;
+module.exports = router;
