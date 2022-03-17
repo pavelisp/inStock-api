@@ -30,4 +30,15 @@ router.get('/', (req, res) => {
     res.status(200).json(allInventory)
 });
 
+
+///Reads the inventory data, finds the item corresponding to the ID given in the url
+///Then returns the data for a single item.
+router.get("/:itemId",(req,res)=>{
+    const inventoryData = readInventory();
+
+    const singleItem = inventoryData.find(item => item.id === req.params.itemId)
+
+    res.status(200).json(singleItem);
+})
+
 module.exports = router;
