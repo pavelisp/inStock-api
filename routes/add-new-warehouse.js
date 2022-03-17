@@ -49,13 +49,13 @@ router.post('/addWarehouse', (req,res) => {
             return res.status(400).json({
                 message: "Contact Position is REQUIRED!"
             })
-        if (!phone){
+        if (!phone || phone.length < 10){
             return res.status(400).json({
                 message: "Phone Number is REQUIRED!"
             })
         if (!email){
             return res.status(400).json({
-                message: "Email is REQUIRED!"
+                message: "Warehouse name is REQUIRED!"
             });
             const newWarehouse = {name,
                 address,
