@@ -17,6 +17,8 @@ function writeWarehouses(data) {
   fs.writeFileSync("./data/warehouses.json", stringifiedData);
 }
 
+// this get just one warehouse with its details and inventories
+
 function getOneWarehouse(warehouseId) {
   let warehouse = fs.readFileSync("./data/warehouses.json");
   let inventories = fs.readFileSync("./data/inventories.json");
