@@ -17,36 +17,11 @@ function writeWarehouses(data) {
   fs.writeFileSync("./data/warehouses.json", stringifiedData);
 }
 
-// this get just one warehouse with its details and inventories
-
-function getOneWarehouse(warehouseId) {
-  let warehouse = fs.readFileSync("./data/warehouses.json");
-  let inventories = fs.readFileSync("./data/inventories.json");
-  const parsedWarehouses = JSON.parse(warehouse);
-  const parsedInventories = JSON.parse(inventories);
-  let getOne = [];
-
-  let Inventories = parsedInventories.filter(
-    (inventories) => warehouseId === inventories.warehouseID
-  );
-
-  let oneWareHouse = parsedWarehouses.filter(
-    (warehouse) => warehouseId === warehouse.id
-  );
-
-  getOne.push(oneWareHouse, Inventories);
-
-  return getOne;
-}
 // Get all the warehouses at localhost:8080/warehouses/
 
 router.get("/", (req, res) => {
   readWarehouses();
   res.status(200).send(readWarehouses());
-});
-
-router.get("/:warehouseId", (req, res) => {
-  res.status(200).json(getOneWarehouse(req.params.warehouseId));
 });
 
 router.post("/addWarehouse", (req, res) => {
