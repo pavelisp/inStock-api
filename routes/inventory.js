@@ -11,6 +11,11 @@ function readInventory () {
     return parsedInventory;
 }
 
+function writeInventory(data){
+    const stringData = JSON.stringify(data);
+    fs.writeFileSync("./data/inventories.json",stringData);
+}
+
 
 router.get('/', (req, res) => {
     let inventoryData = readInventory()
@@ -39,6 +44,34 @@ router.get("/:itemId",(req,res)=>{
     const singleItem = inventoryData.find(item => item.id === req.params.itemId)
 
     res.status(200).json(singleItem);
+})
+
+
+///Will connect to the Add Inventory Item page, and get the item name,desc,cate,status
+///quantity and warehouse name + id. Then complile it into a new item data, and push it to
+//the existing inventoryData. 
+router.post("/",(req,res)=>{
+    const inventoryData = readInventory();
+    const {itemName,description, category, status, quantity, warehouseName} = req.body;
+    const warehouseID = (inventoryData.find(warehouse => warehouse.warehouseName === warehouseName)).warehouseID;
+
+    const newInventoryItem = {
+        id: uuid(),
+        warehouseID: warehouseID,
+        warehouseName: warehouseName,
+        itemName: itemName,
+        description: description,
+        category:category,
+        status:status,
+        quantity:quantity
+    }
+
+    inventoryData.push(newInventoryItem);
+
+    writeInventory(inventoryData);
+
+    res.status(201).json(newInventoryItem);
+
 })
 
 module.exports = router;
