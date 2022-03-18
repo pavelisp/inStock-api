@@ -26,15 +26,15 @@ function getOneWarehouse(warehouseId) {
   const parsedInventories = JSON.parse(inventories);
   let getOne = [];
 
-  let oneInventories = parsedInventories.find(
+  let Inventories = parsedInventories.filter(
     (inventories) => warehouseId === inventories.warehouseID
   );
 
-  let oneWareHouse = parsedWarehouses.find(
+  let oneWareHouse = parsedWarehouses.filter(
     (warehouse) => warehouseId === warehouse.id
   );
 
-  getOne.push(oneWareHouse, oneInventories);
+  getOne.push(oneWareHouse, Inventories);
 
   return getOne;
 }
@@ -46,7 +46,6 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:warehouseId", (req, res) => {
-  getOneWarehouse();
   res.status(200).json(getOneWarehouse(req.params.warehouseId));
 });
 
