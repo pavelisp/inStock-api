@@ -16,7 +16,44 @@ function writeWarehouses(data) {
   const stringifiedData = JSON.stringify(data);
   fs.writeFileSync("./data/warehouses.json", stringifiedData);
 }
+function validation(req) {
+  const {
+    name,
+    address,
+    city,
+    country,
+    contact,
+    position,
+    phone,
+    email
+  } = req.body;
 
+  if (!name) {
+    return "name";
+  }
+  if (!address) {
+    return "address";
+  }
+  if (!city) {
+    return "city";
+  }
+  if (!country) {
+    return "country";
+  }
+  if (!contact) {
+    return "contact";
+  }
+  if (!position) {
+    return "position";
+  }
+  if (!phone) {
+    return "Number";
+  }
+  if (!email) {
+    return "Email";
+  }
+  return "";
+}
 // Get all the warehouses at localhost:8080/warehouses/
 
 router.get("/", (req, res) => {
@@ -26,49 +63,14 @@ router.get("/", (req, res) => {
 
 router.post("/addWarehouse", (req, res) => {
   const warehouses = readWarehouses();
-  const { name, address, city, country, contact, position, phone, email } =
-    req.body;
 
-  if (!name) {
+  const missingField = validation(req.body);
+  if (missingField !== ""){
     return res.status(400).json({
-      message: "Warehouse name is REQUIRED!",
+      message: missingField + "is REQUIRED!"
     });
   }
-  if (!address) {
-    return res.status(400).json({
-      message: "Warehouse address is REQUIRED!",
-    });
-  }
-  if (!city) {
-    return res.status(400).json({
-      message: "Warehouse city is REQUIRED!",
-    });
-  }
-  if (!country) {
-    return res.status(400).json({
-      message: "Warehouse country is REQUIRED!",
-    });
-  }
-  if (!contact) {
-    return res.status(400).json({
-      message: "Contact Name is REQUIRED!",
-    });
-  }
-  if (!position) {
-    return res.status(400).json({
-      message: "Contact Position is REQUIRED!",
-    });
-  }
-  if (!phone) {
-    return res.status(400).json({
-      message: "Phone Number is REQUIRED!",
-    });
-  }
-  if (!email) {
-    return res.status(400).json({
-      message: "Email is REQUIRED!",
-    });
-  }
+
   const newWarehouse = {
     name,
     address,
@@ -77,11 +79,49 @@ router.post("/addWarehouse", (req, res) => {
     contact,
     position,
     phone,
-    email,
+    email
   };
   warehouses.push(newWarehouse);
   writeWarehouses(warehouses);
   res.status(201).json(newWarehouse);
+});
+
+router.put("/:id/edit", (req, res) => {
+  const warehouses = readWarehouses();
+  const warehouseId = req.param.id;
+  const warehouseIndex = warehouses.findIndex(warehouse => {
+    return warehouse.id === warehouseId;
+  });
+  const warehouse = warehouses[warehouseIndex];
+  const {
+    name,
+    address,
+    city,
+    country,
+    contact,
+    position,
+    phone,
+    email
+  } = req.body;
+
+  warehouse.name = name;
+  warehouse.address = address;
+  warehouse.city = city;
+  warehouse.country = country;
+  warehouse.contact = contact;
+  warehouse.position = position;
+  warehouse.phone = phone;
+  warehouse.email = email;
+
+  const missingField = validation(req.body);
+  if (missingField !== ""){
+    return res.status(400).json({
+      message: missingField + "is REQUIRED!"
+    });
+  }
+  warehouses[warehouseIndex] = warehouse;
+
+  writeWarehouses(warehouses);
 });
 
 module.exports = router;
