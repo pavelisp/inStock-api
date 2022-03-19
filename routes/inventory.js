@@ -15,6 +15,14 @@ function writeInventory(data) {
   fs.writeFileSync("./data/inventories.json", stringData);
 }
 
+function isInStock(status){
+    if(status){
+        return "In Stock"
+    }
+    else if(status === false){
+        return "Out of Stock"
+    }
+}
 router.get("/", (req, res) => {
   let inventoryData = readInventory();
 
@@ -56,16 +64,16 @@ router.post("/", (req, res) => {
     (warehouse) => warehouse.warehouseName === warehouseName
   ).warehouseID;
 
-  const newInventoryItem = {
-    id: uuid(),
-    warehouseID: warehouseID,
-    warehouseName: warehouseName,
-    itemName: itemName,
-    description: description,
-    category: category,
-    status: status,
-    quantity: quantity,
-  };
+    const newInventoryItem = {
+        id: uuid(),
+        warehouseID: warehouseID,
+        warehouseName: warehouseName,
+        itemName: itemName,
+        description: description,
+        category:category,
+        status:isInStock(status),
+        quantity:parseInt(quantity)
+    }
 
   inventoryData.push(newInventoryItem);
 
@@ -73,5 +81,27 @@ router.post("/", (req, res) => {
 
   res.status(201).json(newInventoryItem);
 });
+
+
+
+///Edits an existing item by using the data sent by the form and filtering out the correct item we need by using the itemName and warehouseName
+///Then it edits the values within the item and pushes it back into the original json file. Then writes over the inventories file with the new
+///item in it.
+router.post("/editItem", (req,res)=>{
+    const inventoryData = readInventory();
+    const {itemName,description,category,status,warehouse} = req.body;
+
+    const singleItem = inventoryData.filter(item => item.itemName === itemName && item.warehouseName === warehouse)[0];
+    const singleItemIndex = inventoryData.findIndex(item => item.itemName === itemName && item.warehouseName === warehouse);
+
+    singleItem.description = description; singleItem.category = category; singleItem.status = isInStock(status);
+
+    inventoryData.splice(singleItemIndex,1,singleItem);
+
+    writeInventory(inventoryData);
+
+    res.status(201).json(singleItem)
+
+})
 
 module.exports = router;
