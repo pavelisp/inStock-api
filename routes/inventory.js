@@ -43,13 +43,14 @@ router.get("/", (req, res) => {
 
 ///Reads the inventory data, finds the item corresponding to the itemName and warehouse given
 ///Then returns the data for a single item.
-router.get("/itemDetails", (req, res) => {
-  const inventoryData = readInventory();
-  const {itemName,warehouse} = req.body
+router.get("/:itemId", (req, res) => {
+    const inventoryData = readInventory();
 
-  const singleItem = inventoryData.filter(item => item.itemName === itemName && item.warehouseName === warehouse)[0];
-
-  res.status(200).json(singleItem);
+    const singleItem = inventoryData.find(
+      (item) => item.id === req.params.itemId
+    );
+  
+    res.status(200).json(singleItem);
 });
 
 ///Will connect to the Add Inventory Item page, and get the item name,desc,cate,status
