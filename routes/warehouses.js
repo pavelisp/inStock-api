@@ -54,10 +54,6 @@ function validation(req) {
   }
   return "";
 }
-function PrintValidation(reqBody) {
-  if (reqBody === "") return;
-  else return "Validation failed because of" + validation(reqBody);
-}
 // Get all the warehouses at localhost:8080/warehouses/
 
 router.get("/", (req, res) => {
@@ -68,9 +64,11 @@ router.get("/", (req, res) => {
 router.post("/addWarehouse", (req, res) => {
   const warehouses = readWarehouses();
 
-  missingField = validation(req.body);
-  if (p !== ""){
-    
+  const missingField = validation(req.body);
+  if (missingField !== ""){
+    return res.status(400).json({
+      message: missingField + "is REQUIRED!"
+    });
   }
 
   const newWarehouse = {
@@ -115,6 +113,12 @@ router.put("/:id/edit", (req, res) => {
   warehouse.phone = phone;
   warehouse.email = email;
 
+  const missingField = validation(req.body);
+  if (missingField !== ""){
+    return res.status(400).json({
+      message: missingField + "is REQUIRED!"
+    });
+  }
   warehouses[warehouseIndex] = warehouse;
 
   writeWarehouses(warehouses);
