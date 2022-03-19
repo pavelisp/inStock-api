@@ -87,6 +87,13 @@ router.post("/addWarehouse", (req, res) => {
 });
 
 router.put("/:id/edit", (req, res) => {
+
+  const missingField = validation(req.body);
+  if (missingField !== ""){
+    return res.status(400).json({
+      message: missingField + " is REQUIRED!"
+    });
+  }
   const warehouses = readWarehouses();
   const warehouseId = req.param.id;
   const warehouseIndex = warehouses.findIndex(warehouse => {
@@ -113,12 +120,6 @@ router.put("/:id/edit", (req, res) => {
   warehouse.phone = phone;
   warehouse.email = email;
 
-  const missingField = validation(req.body);
-  if (missingField !== ""){
-    return res.status(400).json({
-      message: missingField + "is REQUIRED!"
-    });
-  }
   warehouses[warehouseIndex] = warehouse;
 
   writeWarehouses(warehouses);
