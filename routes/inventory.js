@@ -41,14 +41,13 @@ router.get("/", (req, res) => {
   res.status(200).json(allInventory);
 });
 
-///Reads the inventory data, finds the item corresponding to the ID given in the url
+///Reads the inventory data, finds the item corresponding to the itemName and warehouse given
 ///Then returns the data for a single item.
-router.get("/:itemId", (req, res) => {
+router.get("/itemDetails", (req, res) => {
   const inventoryData = readInventory();
+  const {itemName,warehouse} = req.body
 
-  const singleItem = inventoryData.find(
-    (item) => item.id === req.params.itemId
-  );
+  const singleItem = inventoryData.filter(item => item.itemName === itemName && item.warehouseName === warehouse)[0];
 
   res.status(200).json(singleItem);
 });
