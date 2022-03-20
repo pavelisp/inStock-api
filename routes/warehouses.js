@@ -26,7 +26,7 @@ function validation(req) {
     position,
     phone,
     email
-  } = req.body;
+  } = req;
 
   if (!name) {
     return "name";
@@ -71,16 +71,18 @@ router.post("/addWarehouse", (req, res) => {
     });
   }
 
-  const newWarehouse = {
-    name,
-    address,
-    city,
-    country,
-    contact,
-    position,
-    phone,
-    email
-  };
+  
+    const newWarehouse = {
+      name: req.body.name,
+      address: req.body.address,
+      city: req.body.city,
+      country: req.body.country,
+      contact: req.body.contact,
+      position: req.body.position ,
+      phone: req.body.phone,
+      email: req.body.email
+    };
+  
   warehouses.push(newWarehouse);
   writeWarehouses(warehouses);
   res.status(201).json(newWarehouse);
