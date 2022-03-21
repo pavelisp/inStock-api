@@ -97,11 +97,12 @@ router.put("/:id/edit", (req, res) => {
     });
   }
   const warehouses = readWarehouses();
-  const warehouseId = req.param.id;
+  const warehouseId = req.params.id;
   const warehouseIndex = warehouses.findIndex(warehouse => {
-    return warehouse.id === warehouseId;
+    return warehouse.id == warehouseId;
   });
   const warehouse = warehouses[warehouseIndex];
+  console.log(warehouseIndex)
   const {
     name,
     address,
@@ -117,10 +118,12 @@ router.put("/:id/edit", (req, res) => {
   warehouse.address = address;
   warehouse.city = city;
   warehouse.country = country;
-  warehouse.contact = contact;
-  warehouse.position = position;
-  warehouse.phone = phone;
-  warehouse.email = email;
+  warehouse.contact={name:contact,
+  position:position,
+  phone:phone,
+  email:email}
+  
+  
 
   warehouses[warehouseIndex] = warehouse;
 
